@@ -1,0 +1,18 @@
+services:
+  shopora:
+    build: .
+    container_name: shopora-store
+    ports:
+      - "8080:8000"
+    env_file:
+      - .env
+    volumes:
+      - shopora_data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+volumes:
+  shopora_data:
